@@ -1,2 +1,4 @@
 runserver
 db.sqlite3
+*/__pycache__/
+/data/migrations/__pycache__/
