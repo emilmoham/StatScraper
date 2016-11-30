@@ -3,3 +3,5 @@ db.sqlite3
 */__pycache__/
 /data/migrations/__pycache__/
 requirements.txt
+/tests/
+/data/entryScripts/__pycache__/
