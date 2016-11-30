@@ -16,15 +16,62 @@ class Team(models.Model):
 
 class Player(models.Model):
 	team = models.ForeignKey(Team, on_delete=models.CASCADE)
-	firstName = models.CharField(max_length=100)
-	lastName = models.CharField(max_length=100)
+	name = models.CharField(max_length=100)
 	last_updated = models.DateTimeField('date published', default=None)
-
-	@classmethod
-	def create(cls, firstName, lastName, team):
-		p = cls(team=Team, firstName=firstName, lastName=lastName, last_updated=timezone.now())
-		return p
+	#perGameStats = models.ForeignKey(GameStats, on_delete=models.CASCADE, default=None, null=True)
+	#seasonTotalStats = models.ForeignKey(SeasonStats, on_delete=models.CASCADE, default=None, null=True)
 
 	def __str__(self):
-		return (self.firstName + " " + self.lastName)
+		return (self.name)
+
+class GameStats(models.Model):
+	player = models.ForeignKey(Player, on_delete=models.CASCADE, default=None)
+	GamesPlayed = models.DecimalField(decimal_places=1, max_digits=3)
+	MinutesPlayed = models.DecimalField(decimal_places=1, max_digits=3)
+	Points = models.DecimalField(decimal_places=1, max_digits=3)
+	Rebounds = models.DecimalField(decimal_places=1, max_digits=3)
+	Assists = models.DecimalField(decimal_places=1, max_digits=3)
+	Steals = models.DecimalField(decimal_places=1, max_digits=3)
+	Blocks = models.DecimalField(decimal_places=1, max_digits=3)
+	Turnovers = models.DecimalField(decimal_places=1, max_digits=3)
+	FieldGoalPercentage = models.DecimalField(decimal_places=3, max_digits=3)
+	FreeThrowPercentage = models.DecimalField(decimal_places=3, max_digits=3)
+	ThreePointPercentage = models.DecimalField(decimal_places=3, max_digits=3)
+
+	@classmethod
+	def create(cls, GP, MIN, PPG, RPG, APG, SPG, BPG, TPG, FG, FT, TP):
+		gamestats = cls(GamesPlayed=GP, MinutesPlayed=MIN, Points=PPG, Rebounds=RPG, Assists=APG, Steals=SPG, Blocks=BPG, Turnovers=TPG, FieldGoalPercentage=FG, FreeThrowPercentage=FT, ThreePointPercentage=TP)
+		gamestats.save()
+		return gamestats
+
+	def __str__(self):
+		return (self.player.__str__())
+
+class SeasonStats(models.Model):
+	player = models.ForeignKey(Player, on_delete=models.CASCADE, default=None)
+	MinutesPlayed = models.PositiveSmallIntegerField() #max value 32767
+	FieldGoalsMade = models.PositiveSmallIntegerField() 
+	FieldGoalsAttempted = models.PositiveSmallIntegerField() 
+	FreeThrowsMade = models.PositiveSmallIntegerField() 
+	FreeThrowsAttempted = models.PositiveSmallIntegerField() 
+	ThreePointsMade = models.PositiveSmallIntegerField() 
+	ThreePointsAttempted = models.PositiveSmallIntegerField() 
+	Points = models.PositiveSmallIntegerField() 
+	OffensiveRebounds = models.PositiveSmallIntegerField() 
+	DefensiveRebounds = models.PositiveSmallIntegerField() 
+	Rebounds = models.PositiveSmallIntegerField() 
+	Assists = models.PositiveSmallIntegerField() 
+	Turnovers = models.PositiveSmallIntegerField() 
+	Steals = models.PositiveSmallIntegerField() 
+	Blocks = models.PositiveSmallIntegerField()
+	
+	@classmethod
+	def create(cls, MIN, FGM, FGA, FTM, FTA, TPM, TPA, PTS, OFFR, DEFR, REB, AST, TO, STL, BLK):
+		seasonstats = cls(MinutesPlayed=MIN, FieldGoalsMade=FGM, FieldGoalsAttemted=FGA, FreeThrowsMade=FTM, FreeThrowsAttemted=FTA, ThreePointsMade=TPM, ThreePointsAttempted=TPA, Points=PTS, OffensiveRebounds=OFFR, DefensiveRebounds=DEFR, Rebounds=REB, Assists=AST, Turnovers=TO, Steals=STL, Blocks=BLK)
+		seasonstats.save()
+		return seasonStats
+	
+	def __str__(self):
+		return (self.player.__str__())
+
 
