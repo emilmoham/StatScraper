@@ -34,9 +34,9 @@ class GameStats(models.Model):
 	Steals = models.DecimalField(decimal_places=1, max_digits=3)
 	Blocks = models.DecimalField(decimal_places=1, max_digits=3)
 	Turnovers = models.DecimalField(decimal_places=1, max_digits=3)
-	FieldGoalPercentage = models.DecimalField(decimal_places=3, max_digits=3)
-	FreeThrowPercentage = models.DecimalField(decimal_places=3, max_digits=3)
-	ThreePointPercentage = models.DecimalField(decimal_places=3, max_digits=3)
+	FieldGoalPercentage = models.DecimalField(decimal_places=3, max_digits=4)
+	FreeThrowPercentage = models.DecimalField(decimal_places=3, max_digits=4)
+	ThreePointPercentage = models.DecimalField(decimal_places=3, max_digits=4)
 
 	@classmethod
 	def create(cls, GP, MIN, PPG, RPG, APG, SPG, BPG, TPG, FG, FT, TP):
