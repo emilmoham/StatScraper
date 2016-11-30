@@ -5,3 +5,5 @@ db.sqlite3
 requirements.txt
 /tests/
 /data/entryScripts/__pycache__/
+statscraper/settings.py
+/data/migrations/
