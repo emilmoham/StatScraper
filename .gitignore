@@ -7,3 +7,4 @@ requirements.txt
 /data/entryScripts/__pycache__/
 statscraper/settings.py
 /data/migrations/
+/data/entryScripts/testScripts.py
