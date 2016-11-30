@@ -41,20 +41,30 @@ def findTeamLink(teamName):
 	tLink = t.find_all('a')[1].get('href')
 	return tLink
 
-def scrapePlayerData(teamLink):
+def scrapePlayerData(teamLink, tableNum):
 	"""
-	returns an array of all players and their statistics for the team specified by teamLink
+	returns a list of all players and their statistics for the team specified by teamLink
 	"""
+	if(tableNum == 0):
+		#Get PerGameStatistics
+		skipRows = 2
+		labelSet = gameStatsLabels
+	elif (tableNum == 1):
+		skipRows = 3
+		labelSet = seasonStatsLabels
+	else:
+		print("Error invalid table specified (Choose either 0 or 1)")
+		return None
 	r = requests.get(baseURL + teamLink)
 	soup = BeautifulSoup(r.content, "html.parser")
 	tables = soup.find_all(tableTag, {"class" : tableClass})
-	players = tables[0].find_all(playerTag)
+	players = tables[tableNum].find_all(playerTag)
 	skip = 0
 	playerCount = 0
 	retList = []
 	for player in players:
 		d = {}
-		if(skip < 2 or  skip == len(players) - 1):
+		if(skip < skipRows or  skip == len(players) - 1):
 			#Skipping First two rows which are just titles
 			skip = skip + 1
 			continue
@@ -69,9 +79,10 @@ def scrapePlayerData(teamLink):
 				d['NAME'] = Name
 				continue
 			#Handling the rest of the statistics
-			d[gameStatsLabels[iteration]] = float(info.get_text())
+			d[labelSet[iteration]] = float(info.get_text())
 			iteration = iteration + 1
 		retList.insert(playerCount, d)
 		playerCount = playerCount + 1
 	return retList
-		
+
+
