@@ -3,13 +3,14 @@ from django.utils import timezone
 
 class Team(models.Model):
 	name = models.CharField(max_length=100)
+	conference = models.CharField(max_length=100, null=True, default=None)
 	pub_date = models.DateTimeField('date published')
 
 	@classmethod
-	def create(cls, name):
-		team = cls(name=name, pub_date = timezone.now())
-		team.save()
-		return team
+	def create(cls, name, conference):
+		t = cls(name=name, conference=conference, pub_date=timezone.now())
+		t.save()
+		return t
 	
 	def __str__(self):
 		return self.name
@@ -18,8 +19,6 @@ class Player(models.Model):
 	team = models.ForeignKey(Team, on_delete=models.CASCADE)
 	name = models.CharField(max_length=100)
 	last_updated = models.DateTimeField('date published', default=None)
-	#perGameStats = models.ForeignKey(GameStats, on_delete=models.CASCADE, default=None, null=True)
-	#seasonTotalStats = models.ForeignKey(SeasonStats, on_delete=models.CASCADE, default=None, null=True)
 
 	def __str__(self):
 		return (self.name)
@@ -73,5 +72,3 @@ class SeasonStats(models.Model):
 	
 	def __str__(self):
 		return (self.player.__str__())
-
-

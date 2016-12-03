@@ -8,8 +8,9 @@ from bs4 import BeautifulSoup
 baseURL = "http://www.espn.com/ncb/teams"
 
 #Useful tags and classes
-conferenceTag = "ul"
-conferenceClass = "medium-logos"
+conferenceTag = "div"
+conferenceClass = "mod-container mod-open-list mod-teams-list-medium mod-no-footer"
+conferenceNameTag = "h4"
 teamContainerTag = "li"
 teamNameTag = "h5"
 
@@ -21,13 +22,14 @@ conflictCount = 0
 
 conferences = soup.find_all(conferenceTag, {"class" : conferenceClass})
 for conference in conferences:
+	conferenceName = conference.find(conferenceNameTag).get_text()
 	teams = conference.find_all(teamContainerTag)
 	for team in teams:
 		teamName = team.find(teamNameTag).get_text()
 		teamSet = Team.objects.filter(name=teamName)
 		if(len(teamSet) == 0):
 			insertionCount = insertionCount + 1
-			Team.create(teamName)
+			Team.create(teamName, conferenceName)
 		else:
 			conflictCount = conflictCount + 1
 			print("Team <" + teamName + "> already in database")
