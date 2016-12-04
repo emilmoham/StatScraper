@@ -1,6 +1,7 @@
 import django
 django.setup();
-from data.models import Team
+from django.utils import timezone
+from data.models import Conference, Team
 import requests
 from bs4 import BeautifulSoup
 
@@ -17,24 +18,35 @@ teamNameTag = "h5"
 r = requests.get(baseURL)
 soup = BeautifulSoup(r.content, "html.parser")
 
-insertionCount = 0
-conflictCount = 0
+conferenceInsertionCount = 0
+conferenceConflictCount = 0
+teamInsertionCount = 0
+teamConflictCount = 0
 
-conferences = soup.find_all(conferenceTag, {"class" : conferenceClass})
-for conference in conferences:
-	conferenceName = conference.find(conferenceNameTag).get_text()
-	teams = conference.find_all(teamContainerTag)
+tables = soup.find_all(conferenceTag, {"class" : conferenceClass})
+for table in tables:
+	conferenceName = table.find(conferenceNameTag).get_text()
+	try:
+		c = Conference.objects.get(name=conferenceName)
+		conferenceConflictCount = conferenceConflictCount + 1
+	except Conference.DoesNotExist:
+		c = Conference.create(conferenceName)
+		conferenceInsetionCount = conferenceInsertionCount + 1
+
+	teams = table.find_all(teamContainerTag)
 	for team in teams:
 		teamName = team.find(teamNameTag).get_text()
-		teamSet = Team.objects.filter(name=teamName)
+		teamSet = c.team_set.filter(name=teamName)
 		if(len(teamSet) == 0):
-			insertionCount = insertionCount + 1
-			Team.create(teamName, conferenceName)
+			teamInsertionCount = teamInsertionCount + 1
+			c.team_set.create(name=teamName, pub_date=timezone.now())
 		else:
-			conflictCount = conflictCount + 1
+			teamConflictCount = teamConflictCount + 1
 			print("Team <" + teamName + "> already in database")
 			print("\tConflicts with: " + teamSet.__str__())
 print("Operation completed.")
-print(" " + str(insertionCount) + "\tInsertions")
-print(" " + str(conflictCount) + "\tConflicts")
+print(" " + str(conferenceInsertionCount) + "\tConference Entry Insertions")
+print(" " + str(conferenceConflictCount) + "\tConference Entry Conflicts")
+print(" " + str(teamInsertionCount) + "\tTeam Entry Insertions")
+print(" " + str(teamConflictCount) + "\tTeam Entry Conflicts")
 
