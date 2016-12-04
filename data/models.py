@@ -1,9 +1,20 @@
 from django.db import models
 from django.utils import timezone
+class Conference(models.Model):
+	name = models.CharField(max_length=100)
+	
+	@classmethod
+	def create(cls, name):
+		c = cls(name=name)
+		c.save()
+		return c
+
+	def __str__(self):
+		return self.name
 
 class Team(models.Model):
 	name = models.CharField(max_length=100)
-	conference = models.CharField(max_length=100, null=True, default=None)
+	conference = models.ForeignKey(Conference, on_delete=models.CASCADE, null=True, default=None)
 	pub_date = models.DateTimeField('date published')
 
 	@classmethod
