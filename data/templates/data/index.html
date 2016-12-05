@@ -1,0 +1,63 @@
+{% if conf_list %}
+	<form>
+		<select name="conference1">
+		{% for conf in conf_list %}
+			{% if conf.name|cut:" " == conf1|cut:" " %}
+			<option value={{ conf.name|cut:" " }} selected="selected">{{ conf.name }}</option>
+			{% else %}
+			<option value={{ conf.name|cut:" " }}>{{ conf.name }}</option>
+			{% endif %}
+		{% endfor %}
+		</select>
+		<select name="conference2">
+		{% for conf in conf_list %}
+			{% if conf.name|cut:" " == conf2|cut:" " %}
+				<option value={{ conf.name|cut:" " }} selected="selected">{{ conf.name }}</option>
+			{% else %}
+				<option value={{ conf.name|cut:" " }}>{{ conf.name }}</option>
+			{% endif %}
+		{% endfor %}
+		</select>
+		<br/>
+		<br/>
+		{% if team1_list %}
+			<select name="team1">
+			{% for team in team1_list %}
+				{% if team.name|cut:" " == team1 %}
+				<option value={{ team.name|cut:" "}} selected="selected">{{ team.name}}</option>
+				{% else %}
+				<option value={{ team.name|cut:" " }}>{{ team.name }}</option>
+				{% endif %}
+			{% endfor %}
+			</select>
+		{% endif %}
+		{% if team2_list %}
+			<select name="team2">
+			{% for team in team2_list %}
+				{% if team.name|cut:" " == team2 %}
+				<option value={{ team.name|cut:" "}} selected="selected">{{ team.name }}</option>
+				{% else %}
+				<option value={{ team.name|cut:" "}}>{{ team.name }}</option>
+				{% endif %}
+			{% endfor %}
+			</select>
+		{% endif %}
+		<input type="submit" value="Confirm Selections" />
+	</form>
+	{% if team1_player_set %}
+		{% for player in team1_player_set %}
+		<p>{{ player.name }}</p>
+		{% endfor %}
+	{% else %}
+		<p>No Team1 Specified</p>
+	{% endif %}
+	{% if team2_player_set %}
+		{% for player in team2_player_set %}
+		<p>{{ player.name }}</p>
+		{% endfor %}
+	{% else %}
+		<p>No Team2 Speicified</p>
+	{% endif %}
+{% else %}
+	<p>No teams are available...</p>
+{% endif %}
