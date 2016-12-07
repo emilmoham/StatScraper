@@ -1,0 +1,18 @@
+<!-- Confrming we have our teams -->
+{% if team1 %}
+<p>{{ team1 }}</p>
+{% endif %}
+{% if team2 %}
+<p>{{ team2 }}</p>
+{% endif %}
+{% if team1_obj %}
+<p>Loaded database info for team 1</p>
+{% endif %}
+{% if team2_obj %}
+<p>Loaded database info for team 2</p>
+{% endif %}
+<!-- END Confirmation -->
+<!-- Confirmation we can iterate over our labels properly -->
+{% if labels %}
+	<p>{% for stat in labels %}{{ stat }} &emsp;{% endfor %}</p>
+{% endif %}

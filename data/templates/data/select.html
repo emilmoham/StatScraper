@@ -1,0 +1,84 @@
+<style>
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+
+	padding: 1px 4px 1px 4px;
+}
+</style>
+
+{% if conf_list %}
+	<form>
+		<!-- Conference 1 and Team 1 -->
+		<select name="c1">
+		{% for conf in conf_list %}
+			{% if conf.name|cut:" " == conf1|cut:" " %}
+			<option value={{ conf.name|cut:" " }} selected="selected">{{ conf.name }}</option>
+			{% else %}
+			<option value={{ conf.name|cut:" " }}>{{ conf.name }}</option>
+			{% endif %}
+		{% endfor %}
+		</select>
+		{% if team1_list %}
+			<select name="t1">
+			{% for team in team1_list %}
+				{% if team.name|cut:" " == team1 %}
+				<option value={{ team.name|cut:" "}} selected="selected">{{ team.name}}</option>
+				{% else %}
+				<option value={{ team.name|cut:" " }}>{{ team.name }}</option>
+				{% endif %}
+			{% endfor %}
+			</select>
+		{% endif %}
+		<!-- End C1 T1 -->
+		<br><br>
+		<!-- Conference 2 and Team 2 -->
+		<select name="c2">
+		{% for conf in conf_list %}
+			{% if conf.name|cut:" " == conf2|cut:" " %}
+				<option value={{ conf.name|cut:" " }} selected="selected">{{ conf.name }}</option>
+			{% else %}
+				<option value={{ conf.name|cut:" " }}>{{ conf.name }}</option>
+			{% endif %}
+		{% endfor %}
+		</select>
+		{% if team2_list %}
+			<select name="t2">
+			{% for team in team2_list %}
+				{% if team.name|cut:" " == team2 %}
+				<option value={{ team.name|cut:" "}} selected="selected">{{ team.name }}</option>
+				{% else %}
+				<option value={{ team.name|cut:" "}}>{{ team.name }}</option>
+				{% endif %}
+			{% endfor %}
+			</select>
+		{% endif %}
+		<!-- End C2 T2 -->
+		<br><br>
+		<!-- Stat Selection -->
+		{% if stat_list == "1" %}
+			<input type="radio" name="statlist" value="1" checked>Per Game Statistics</input><br>
+		{% else %}
+			<input type="radio" name="statlist" value="1">Per Game Statistics</input><br>
+		{% endif %}
+		{% if stat_list == "2" %}
+			<input type="radio" name="statlist" value="2" checked>Season Total Statistics</input><br>
+		{% else %}
+			<input type="radio" name="statlist" value="2">Season Total Statistics</input><br>
+		{% endif %}
+		<!-- END Stat Selection -->
+		<br>
+		{% if conf1 == None or conf2 == None or team1 == None or team2 == None or stat_list == None %}
+			<input type="submit" value="Confirm Selections" \>
+		{% else %}
+			<a href="/data/{{team1}}/{{team2}}/" class="button">Compare</a>
+		{% endif %}
+		<a href="/data/" class="button">Reset</a>
+	</form>
+{% else %}
+	<p>No teams are available...</p>
+{% endif %}
