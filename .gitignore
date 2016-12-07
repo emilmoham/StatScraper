@@ -8,3 +8,4 @@ requirements.txt
 statscraper/settings.py
 /data/migrations/
 /data/entryScripts/testScripts.py
+data/entryScripts/test.py
