@@ -1,18 +1,58 @@
-<!-- Confrming we have our teams -->
-{% if team1 %}
-<p>{{ team1 }}</p>
+{% load dict_lookup %}
+{% load replace %}
+<body>
+
+<h4>You're comparing {{ team1 }} and {{ team2 }}</h4>
+{% if team1_obj and team2_obj %}
+	{% if labels %}
+		<form id="form1">
+		{% for stat in labels %}
+			{% if stat != 'NAME' %}
+			<input type="number" name={{ stat|changePercent }} min="-10000" max="10000" value={{ weights|get_item:stat }} step="0.1" \> {{ stat }}<br>
+			{% endif %}
+		{% endfor %}
+			<input type="submit" value="Compare" />
+		</form>
+		<form action="/data/{{ team1 }}/{{ team2 }}/{{ statType }}">
+			<input type="submit" value="Reset"/>
+		</form>
+		<div id="stat container">
+			<div id="left" style="padding-right: 10px;float:left">
+				<h4>{{ team1 }}</h4>
+				{% for stat in labels %}
+					{% if stat != 'NAME'%}
+						{{ stat }} : {{ team1_stat_weighted|get_item:stat }}<br>
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div id="mid" style="margin: 0px 30px 0px 30px; float:left; display: inline-block;">
+				<h4>Your weights favor:</h4>
+				{% for stat in labels %}
+					{% if stat != 'NAME' %}
+						{% if team1_stat_weighted|get_float_item:stat > team2_stat_weighted|get_float_item:stat %}
+							{{ team1 }}<br>
+						{% elif team1_stat_weighted|get_float_item:stat < team2_stat_weighted|get_float_item:stat %}
+							{{ team2 }}<br>
+						{% else %}
+							Neither team is favored<br>
+						{% endif %}
+					{% endif %}
+				{% endfor %}	
+			</div>
+			<div id="right" style="padding-left:10px; display: inline-block;">
+				<h4>{{ team2 }}</h4>
+				{% for stat in labels %}
+					{% if stat != 'NAME' %}
+						{{ stat }} : {{ team2_stat_weighted|get_item:stat }}<br>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		{% if favored %}
+		<div id="verdict">
+		<h4>Overall, {{ favored }} is the better team according to your weights</h4>
+		</div>
+		{% endif %}
+	{% endif %}
 {% endif %}
-{% if team2 %}
-<p>{{ team2 }}</p>
-{% endif %}
-{% if team1_obj %}
-<p>Loaded database info for team 1</p>
-{% endif %}
-{% if team2_obj %}
-<p>Loaded database info for team 2</p>
-{% endif %}
-<!-- END Confirmation -->
-<!-- Confirmation we can iterate over our labels properly -->
-{% if labels %}
-	<p>{% for stat in labels %}{{ stat }} &emsp;{% endfor %}</p>
-{% endif %}
+</body>
