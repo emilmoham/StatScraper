@@ -20,5 +20,7 @@ from . import views
 urlpatterns = [
 	url(r'^$', views.index, name="index"),
 	url(r'^data/', include('data.urls')),
+	url(r'^genCSV/', include('genCSV.urls')),
+    url(r'^API/', include('API.urls')),
     url(r'^admin/', admin.site.urls),
 ]
