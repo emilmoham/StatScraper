@@ -1,0 +1,17 @@
+{% load replace %}
+<head><head>
+<body>
+    {% if conf_list %}
+    <form action="dbc/" method="post" target="_blank">
+        {% csrf_token %}
+        <select name="conf">
+        {% for conf in conf_list %}
+            <option value={{ conf|changeSpace }}>{{ conf }}</option>
+        {% endfor %}
+        </select><br>
+        <input type="radio" name="stat_table" value="game" checked>Per Game Table</input><br>
+        <input type="radio" name="stat_table" value="season" >Season Total Table</input><br>
+        <input type="submit" value="submit">
+    </form>
+    {% endif %}
+</body>

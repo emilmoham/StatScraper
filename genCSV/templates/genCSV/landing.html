@@ -1,0 +1,22 @@
+{% load static %}
+<head></head>
+<body>
+    <h1>Download CSV Files</h1>
+    <h3>Complete Statistics files</h3>
+    <a href={% static "genCSV/full_game.csv" %}>Per Game Stats</a><br>
+    <a href={% static "genCSV/full_season.csv" %}>Season Total Stats</a>
+
+    <div>
+        <h3>By Conference</h3>
+        <form action="submit" method="post">
+            <select name="conf">
+                <option value="test1">Ayy</option>
+                <option value="test2">Lmao</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <h3>By Team</h3>
+    </div>
+</body>
